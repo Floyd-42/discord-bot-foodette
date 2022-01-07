@@ -1,7 +1,8 @@
 import requests
 
 from bs4 import BeautifulSoup
-import discord_connector
+from discord_connector import Connector
+from datetime import date, timedelta
 
 # week sould be something like "202203"
 def get_meals(week):
@@ -32,7 +33,8 @@ def get_meals(week):
 
 
 def main():
-    # print(get_meals("202201"))
-    discord_connector.connector()
+    date_next_week = "".join([f'{x:02}' for x in (date.today()+timedelta(days=7)).isocalendar()[0:2]])
+    Connector.meals = get_meals(date_next_week)
+    Connector.run()
 if __name__ == '__main__':
     main()
