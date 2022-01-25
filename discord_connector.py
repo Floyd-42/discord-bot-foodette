@@ -53,7 +53,7 @@ class Connector:
             print("Error: Unsupported meals count above 10.")
         for i in range(len(cls.meals)):
             await message.add_reaction(cls.emojis[i])
-
+        await Connector.close()
 
     @classmethod
     async def close(cls):
