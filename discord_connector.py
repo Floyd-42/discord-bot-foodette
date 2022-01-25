@@ -1,12 +1,13 @@
 import os
-from typing import Counter
 import discord
-from discord import emoji
 from discord.ext import tasks
 
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from dotenv import load_dotenv
 load_dotenv()
+
+import locale
+# locale.setlocale(locale.LC_ALL, 'UTF-8')
 
 import random
 
@@ -25,7 +26,6 @@ class Connector:
     async def on_ready():
         print(f"Bot logged as {Connector.client.user}")
         Connector.send.start(Connector)
-        # await Connector.close()
 
     
     @classmethod
@@ -40,10 +40,9 @@ class Connector:
     @tasks.loop(minutes=1)
     # @tasks.loop(hours=336)
     async def send(cls):
-        title = f"Foodette du {(date.today()+timedelta(days=10)).strftime('%A %m/%d/%Y')}"
+        title = f"Foodette du {(date.today()+timedelta(days=8)).strftime('%A %d/%m/%Y').capitalize()}"
         embed=discord.Embed(title=title, description=Connector.description(), color=0xFF5733)
-        embed.set_thumbnail(url="https://touteslesbox.fr/wp-content/uploads/2016/07/logo-foodette.png")
-
+        embed.set_thumbnail(url='https://touteslesbox.fr/wp-content/uploads/2016/07/logo-foodette.png')
         # Testing
         channel = cls.client.get_channel(923976716223914026)
         # CDC
@@ -51,7 +50,7 @@ class Connector:
 
         message  = await channel.send(embed=embed)
         if len(cls.meals) > len(cls.emojis):
-            print("Error: Unsupported meals size above 10.")
+            print("Error: Unsupported meals count above 10.")
         for i in range(len(cls.meals)):
             await message.add_reaction(cls.emojis[i])
 
