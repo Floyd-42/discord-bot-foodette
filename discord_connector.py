@@ -1,13 +1,12 @@
 import os
 import discord
-from discord.ext import tasks
 
 from datetime import date, timedelta
 from dotenv import load_dotenv
 load_dotenv()
 
 import locale
-# locale.setlocale(locale.LC_ALL, 'UTF-8')
+# locale.setlocale(locale.LC_ALL, 'fr_FR')
 
 import random
 
@@ -25,7 +24,7 @@ class Connector:
     @client.event
     async def on_ready():
         print(f"Bot logged as {Connector.client.user}")
-        Connector.send.start(Connector)
+        await Connector.send()
 
     
     @classmethod
@@ -37,12 +36,11 @@ class Connector:
         return description
     
     @classmethod
-    @tasks.loop(minutes=1)
-    # @tasks.loop(hours=336)
     async def send(cls):
         title = f"Foodette du {(date.today()+timedelta(days=8)).strftime('%A %d/%m/%Y').capitalize()}"
         embed=discord.Embed(title=title, description=Connector.description(), color=0xFF5733)
         embed.set_thumbnail(url='https://touteslesbox.fr/wp-content/uploads/2016/07/logo-foodette.png')
+
         # Testing
         channel = cls.client.get_channel(923976716223914026)
         # CDC
